@@ -19,7 +19,7 @@
 11. 第三方接口调用`RestTemplate`
 12. 常用配置（见application.properties）
 
-###　更多内容，持续更新
+### 更多内容，持续更新
 
 ---
 
@@ -29,30 +29,30 @@
 父pom.xml文件中
 
 ```xml
-	<groupId>demo</groupId>
-    <artifactId>parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>parent</name>
-    <!--必须指定为pom-->
-    <packaging>pom</packaging>
-	<!--指定子模块-->
-    <modules>
-        <module>web</module>
-        <module>service</module>
-    </modules>
+<groupId>demo</groupId>
+<artifactId>parent</artifactId>
+<version>0.0.1-SNAPSHOT</version>
+<name>parent</name>
+<!--必须指定为pom-->
+<packaging>pom</packaging>
+<!--指定子模块-->
+<modules>
+    <module>web</module>
+    <module>service</module>
+</modules>
 ```
 
 子模块pom.xml中
 
 ```xml
-	<!--指定parent-->
-	<parent>
-        <groupId>demo</groupId>
-        <artifactId>parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <!--上面的三个可以直接copy父pom.xml中的内容-->
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+<!--指定parent-->
+<parent>
+    <groupId>demo</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <!--上面的三个可以直接copy父pom.xml中的内容-->
+    <relativePath>../pom.xml</relativePath>
+</parent>
 ```
 
 详见本项目代码
@@ -63,14 +63,14 @@
 若入参是对象，则给该对象的类加上`@Validated`, 注意`@Valid`不要漏了，否则不会生效
 
 ```java
- 	/**
-     * 参数校验2，入参为json数据
-     * 异常类型：{@link org.springframework.web.bind.MethodArgumentNotValidException}
-     */
-    @PostMapping("/param1")
-    public User param1(@Valid @RequestBody User user) {
-        return user;
-    }
+/**
+ * 参数校验2，入参为json数据
+ * 异常类型：{@link org.springframework.web.bind.MethodArgumentNotValidException}
+ */
+@PostMapping("/param1")
+public User param1(@Valid @RequestBody User user) {
+    return user;
+}
 ```
 
 ```java
@@ -118,5 +118,5 @@ spring.servlet.multipart.max-request-size=10MB
 
 #### More
 
-更多内容，持续更新，感谢**`Star`**
+更多内容，持续更新，感谢`Star`
 
