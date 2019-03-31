@@ -1,0 +1,49 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="Register,Login" />
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no"/>
+	<title>ajax test</title>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<style>
+		input{
+			width: 90vw;
+			font-size: 20px;
+		}
+		#result{
+			background-color: #51a42e;
+			padding: 10px;
+		}
+		button{
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>最好打开控制台测试</h1>
+	<div></div>
+	<h3 id="result"></h3>
+	<input id="input" value="http://localhost:8080/ajax" placeholder="请求的URL"></input><br>
+	<button id="btn">获取数据</button>
+</body>
+<script type="text/javascript">
+    var data=JSON.stringify({"username":"Childwanwan","password":"123"});
+	$("#btn").click(function(){
+		console.log("click")
+        $("#result").text("")
+		$.ajax({
+			url: $("#input").val(),
+			method: "post",
+            data: data,
+            contentType: "application/json",
+            xhrFields: {"withCredentials": true},//携带cookie
+			success: res=>{
+				console.log(res)
+				$("#result").text(res)
+			}
+		})
+	})
+</script>
+</html>

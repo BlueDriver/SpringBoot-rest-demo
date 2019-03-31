@@ -1,0 +1,13 @@
+<h1>Hello, ${name}</h1>
+#if(gender == 'male')
+<h1>先生</h1>
+#else
+<h1>女士</h1>
+#end
+<h3>Hobby:</h3>
+<ul>
+    #for(item: hobby)
+    <li>${item}</li>
+    #end
+</ul>
+<h3><a href="https://www.oschina.net/p/jetbrick-template" target="_blank">JetBrick</a>，轻量级的模板引擎</h3>
