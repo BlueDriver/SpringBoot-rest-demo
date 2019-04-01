@@ -1,5 +1,6 @@
 package demo.web.controller;
 
+import demo.web.controller.base.ResponseData;
 import demo.web.controller.req.User;
 import demo.web.handler.GlobalExceptionHandler;
 import demo.web.service.AsyncTaskService;
@@ -110,8 +111,8 @@ public class RestfulController {
      * 异常类型：{@link org.springframework.web.bind.MethodArgumentNotValidException}
      */
     @PostMapping("/param1")
-    public User param1(@Valid @RequestBody User user) {
-        return user;
+    public ResponseData param1(@Valid @RequestBody User user) {
+        return ResponseData.successObj().putData("user", user);
     }
 
     /**

@@ -33,14 +33,14 @@ import javax.validation.ConstraintViolationException;
 @ResponseBody
 public class GlobalExceptionHandler {
     /**
-     * 处理参数校验异常
+     * 处理多参校验异常
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, BindException.class})
     private ResponseData paramHandler(Exception e) {
         ResponseData responseData = new ResponseData();
         responseData.setCode(ResponseCode.PARAM_INVALID);
         FieldError error;// = new FieldError("obj", "field", "default msg");
-        //入参为对象
+        //入参为对象(json)
         if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
             error = ex.getBindingResult().getFieldError();//如果错误不止一个，亲测好象是随机获取一个错误
@@ -49,13 +49,14 @@ public class GlobalExceptionHandler {
             BindException ex = (BindException) e;
             error = ex.getBindingResult().getFieldError();
         }
-        responseData.setMsg(error.getField() + error.getDefaultMessage() + ":" + error.getRejectedValue());
+        responseData.setMsg("参数非法：" + error.getDefaultMessage() + ": " +
+                "[" + error.getField() + "=" + error.getRejectedValue() + "]");
         responseData.setExt(e.getClass().getName());
         return responseData;
     }
 
     /**
-     * 单个参数校验
+     * 单个参数校验（键值对)
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
         log.error("单个参数校验异常", e);
         ResponseData responseData = new ResponseData();
         responseData.setCode(ResponseCode.PARAM_INVALID)
-                .setMsg(e.getMessage())
+                .setMsg("参数非法：" + e.getMessage())
                 .setExt(e.getClass().getName());
         return responseData;
     }
@@ -90,9 +91,7 @@ public class GlobalExceptionHandler {
     private ResponseData defaultExceptionHandler(HttpServletRequest req, HttpServletResponse resp,
                                                  HttpSession session, Exception e) {
         log.error("exception handler: ", e);
-        ResponseData responseData = ResponseData.exceptionObj(e);
-        responseData.setExt(e.getClass().getName());
-        return responseData;
+        return ResponseData.exceptionObj(e);
     }
 
 
