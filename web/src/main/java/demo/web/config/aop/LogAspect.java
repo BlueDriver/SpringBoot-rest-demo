@@ -30,7 +30,7 @@ public class LogAspect {
     /**
      * 仅针对{@link RestfulController#hello()} 演示
      */
-    //@Pointcut("execution(public * demo.web.controller.RestfulController..*(..))")//类内所有方法
+    //@Pointcut("execution(public * demo.web.controller.RestfulController.*(..))")//类内所有方法
     @Pointcut("execution(public * demo.web.controller.RestfulController.hello())")//仅hello()方法
     public void webLog() {
     }
@@ -55,6 +55,6 @@ public class LogAspect {
             list.add(obj);
         }
         //{} 表示占位符
-        log.info("method=[{}.{}], cost=[{}ms], args={}", className, methodName, cost, list);
+        log.info("method=[{}.{}], args={}, cost=[{}ms]", className, methodName, list, cost);
     }
 }

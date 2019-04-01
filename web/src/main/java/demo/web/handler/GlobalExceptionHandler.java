@@ -1,5 +1,7 @@
 package demo.web.handler;
 
+import demo.web.controller.base.ResponseCode;
+import demo.web.controller.base.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -13,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -36,19 +36,22 @@ public class GlobalExceptionHandler {
      * 处理参数校验异常
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, BindException.class})
-    private Map<String, Object> paramHandler(Exception e) {
-        Map<String, Object> map = new HashMap<>();
-        FieldError error = new FieldError("obj", "field", "default msg");
+    private ResponseData paramHandler(Exception e) {
+        ResponseData responseData = new ResponseData();
+        responseData.setCode(ResponseCode.PARAM_INVALID);
+        FieldError error;// = new FieldError("obj", "field", "default msg");
+        //入参为对象
         if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
-            error = ex.getBindingResult().getFieldError();//如果错误不知一个，亲测好象是随机获取一个错误
-        } else if (e instanceof BindException) {
+            error = ex.getBindingResult().getFieldError();//如果错误不止一个，亲测好象是随机获取一个错误
+        } else {// if (e instanceof BindException) {
+            //入参为键值对
             BindException ex = (BindException) e;
             error = ex.getBindingResult().getFieldError();
         }
-        map.put("msg", error.getField() + error.getDefaultMessage() + ":" + error.getRejectedValue());
-        map.put("type", e.getClass().getName());
-        return map;
+        responseData.setMsg(error.getField() + error.getDefaultMessage() + ":" + error.getRejectedValue());
+        responseData.setExt(e.getClass().getName());
+        return responseData;
     }
 
     /**
@@ -56,12 +59,13 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
-    public Map<String, Object> handleBindGetException(ConstraintViolationException ex) {
-        log.error("单个参数校验异常", ex);
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", ex.getClass().getName());
-        map.put("msg", ex.getMessage());
-        return map;
+    public ResponseData handleBindGetException(ConstraintViolationException e) {
+        log.error("单个参数校验异常", e);
+        ResponseData responseData = new ResponseData();
+        responseData.setCode(ResponseCode.PARAM_INVALID)
+                .setMsg(e.getMessage())
+                .setExt(e.getClass().getName());
+        return responseData;
     }
 
 
@@ -70,27 +74,25 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     @ResponseBody
-    public Map<String, Object> handleMax(MaxUploadSizeExceededException ex) {
-        log.error("文件过大", ex);
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", ex.getClass().getName());
-        map.put("msg", ex.getMessage());
-        map.put("desc", "文件过大");
-        return map;
+    public ResponseData handleMax(MaxUploadSizeExceededException e) {
+        log.error("文件过大", e);
+        ResponseData responseData = new ResponseData();
+        responseData.setCode(ResponseCode.PARAM_INVALID)
+                .setMsg("上传文件过大")
+                .setExt(e.getClass().getName());
+        return responseData;
     }
 
     /**
      * 默认异常处理，入参需要哪些参数可根据需求而定
      */
     @ExceptionHandler(value = Exception.class)
-    private Map<String, Object> defaultExceptionHandler(HttpServletRequest req, HttpServletResponse resp,
-                                                        HttpSession session, Exception e) {
+    private ResponseData defaultExceptionHandler(HttpServletRequest req, HttpServletResponse resp,
+                                                 HttpSession session, Exception e) {
         log.error("exception handler: ", e);
-        Map<String, Object> map = new HashMap<>();
-        map.put("code", 1);
-        map.put("msg", e.getMessage());
-        map.put("type", e.getClass().getName());
-        return map;
+        ResponseData responseData = ResponseData.exceptionObj(e);
+        responseData.setExt(e.getClass().getName());
+        return responseData;
     }
 
 
