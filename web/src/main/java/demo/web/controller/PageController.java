@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PageController {
     /**
-     * 跳转至demo.html
+     * 跳转至demo.html（静态页面）
      */
     @RequestMapping("/demo1")
     public String demoPage() {
-        return "demo";
+        return "/static/demo";
     }
 }
