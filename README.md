@@ -18,6 +18,7 @@
 10. 计划任务（定时任务）`Scheduled`
 11. 第三方接口调用`RestTemplate`
 12. 常用配置（见application.properties）
+13. 随机验证码生成`VerifyCodeUtils`
 
 ### 更多内容，持续更新
 
@@ -118,5 +119,5 @@ spring.servlet.multipart.max-request-size=10MB
 
 #### More
 
-更多内容，持续更新，感谢`Star`
+更多内容，持续更新，感谢支持！
 
