@@ -7,6 +7,7 @@ import demo.web.service.AsyncTaskService;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,11 +98,11 @@ public class RestfulController {
     }
 
     /**
-     * 参数校验1，入参为键值对形式
+     * 参数校验1，入参为键值对形式，返回xml格式数据
      * http://localhost:8080/param?email=abc@aa.com&username=alice
      * 异常类型：{@link org.springframework.validation.BindException}
      */
-    @RequestMapping("/param")
+    @RequestMapping(value = "/param", produces = MediaType.APPLICATION_XML_VALUE)
     public User param(@Valid User user) {
         return user;
     }
