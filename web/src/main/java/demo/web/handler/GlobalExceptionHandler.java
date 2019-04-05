@@ -1,7 +1,7 @@
 package demo.web.handler;
 
 import demo.web.controller.base.ResponseCode;
-import demo.web.controller.base.ResponseData;
+import demo.web.controller.base.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -36,9 +36,9 @@ public class GlobalExceptionHandler {
      * 处理多参校验异常
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, BindException.class})
-    private ResponseData paramHandler(Exception e) {
-        ResponseData responseData = new ResponseData();
-        responseData.setCode(ResponseCode.PARAM_INVALID);
+    private ResponseDTO paramHandler(Exception e) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setCode(ResponseCode.PARAM_INVALID);
         FieldError error;// = new FieldError("obj", "field", "default msg");
         //入参为对象(json)
         if (e instanceof MethodArgumentNotValidException) {
@@ -49,10 +49,10 @@ public class GlobalExceptionHandler {
             BindException ex = (BindException) e;
             error = ex.getBindingResult().getFieldError();
         }
-        responseData.setMsg("参数非法：" + error.getDefaultMessage() + ": " +
+        responseDTO.setMsg("参数非法：" + error.getDefaultMessage() + ": " +
                 "[" + error.getField() + "=" + error.getRejectedValue() + "]");
-        responseData.setExt(e.getClass().getName());
-        return responseData;
+        responseDTO.setExt(e.getClass().getName());
+        return responseDTO;
     }
 
     /**
@@ -60,13 +60,13 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
-    public ResponseData handleBindGetException(ConstraintViolationException e) {
+    public ResponseDTO handleBindGetException(ConstraintViolationException e) {
         log.error("单个参数校验异常", e);
-        ResponseData responseData = new ResponseData();
-        responseData.setCode(ResponseCode.PARAM_INVALID)
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setCode(ResponseCode.PARAM_INVALID)
                 .setMsg("参数非法：" + e.getMessage())
                 .setExt(e.getClass().getName());
-        return responseData;
+        return responseDTO;
     }
 
 
@@ -75,23 +75,23 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     @ResponseBody
-    public ResponseData handleMax(MaxUploadSizeExceededException e) {
+    public ResponseDTO handleMax(MaxUploadSizeExceededException e) {
         log.error("文件过大", e);
-        ResponseData responseData = new ResponseData();
-        responseData.setCode(ResponseCode.PARAM_INVALID)
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setCode(ResponseCode.PARAM_INVALID)
                 .setMsg("上传文件过大")
                 .setExt(e.getClass().getName());
-        return responseData;
+        return responseDTO;
     }
 
     /**
      * 默认异常处理，入参需要哪些参数可根据需求而定
      */
     @ExceptionHandler(value = Exception.class)
-    private ResponseData defaultExceptionHandler(HttpServletRequest req, HttpServletResponse resp,
-                                                 HttpSession session, Exception e) {
+    private ResponseDTO defaultExceptionHandler(HttpServletRequest req, HttpServletResponse resp,
+                                                HttpSession session, Exception e) {
         log.error("exception handler: ", e);
-        return ResponseData.exceptionObj(e);
+        return ResponseDTO.exceptionObj(e);
     }
 
 
