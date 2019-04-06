@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -41,6 +42,7 @@ public class MailSenderService {
     /**
      * 普通文本邮件
      */
+    @Async
     public void sendSimple(String receiverEmail, String content, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("cpwu@foxmail.com");
@@ -53,6 +55,7 @@ public class MailSenderService {
     /**
      * HTML内容邮件
      */
+    @Async
     public void sendHTMLMessage(String receiverEmail, String htmlString,
                                 String subject, String senderEmail, String senderName) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = sender.createMimeMessage();
@@ -69,6 +72,7 @@ public class MailSenderService {
     /**
      * 使用JetBrick模板引擎渲染HTML邮件内容
      */
+    @Async
     public void sendTemplateMessage(String receiverEmail, Map<String, Object> param, String templatePath, String subject,
                                     String senderEmail, String senderName) throws IOException, MessagingException {
         String renderString = render(param, templatePath);
