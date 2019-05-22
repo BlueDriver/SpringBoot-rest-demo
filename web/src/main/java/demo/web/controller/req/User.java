@@ -29,8 +29,8 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     private String id;//用户ID
-
-    @NotNull(message = "昵称不能为空")
+    //参考：https://www.jianshu.com/p/46eda1f96abe
+    @NotNull(message = "{username.isNull}")//错误信息见ValidationMessages.properties文件
     @Length(min = 2, max = 64, message = "昵称长度必须在2-64个字符")
     private String username;//用户名（昵称）
 
