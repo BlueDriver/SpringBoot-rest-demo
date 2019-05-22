@@ -1,5 +1,7 @@
 package demo.web.controller.req;
 
+import demo.web.controller.validator.ValidatorGroup1;
+import demo.web.controller.validator.ValidatorGroup2;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,10 +33,10 @@ public class User {
     private String id;//用户ID
     //参考：https://www.jianshu.com/p/46eda1f96abe
     @NotNull(message = "{username.isNull}")//错误信息见ValidationMessages.properties文件
-    @Length(min = 2, max = 64, message = "昵称长度必须在2-64个字符")
+    @Length(min = 2, max = 64, message = "昵称长度必须在2-64个字符", groups = {ValidatorGroup1.class})//分组校验
     private String username;//用户名（昵称）
 
-    @Email(message = "邮箱必须合法")
+    @Email(message = "邮箱必须合法", groups = {ValidatorGroup2.class, ValidatorGroup2.class})//分组校验
     @NotNull(message = "邮箱不能为空")
     private String email;// 邮箱
 }

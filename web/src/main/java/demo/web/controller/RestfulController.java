@@ -2,6 +2,7 @@ package demo.web.controller;
 
 import demo.web.controller.base.ResponseDTO;
 import demo.web.controller.req.User;
+import demo.web.controller.validator.ValidatorGroup1;
 import demo.web.handler.GlobalExceptionHandler;
 import demo.web.service.AsyncTaskService;
 import org.hibernate.validator.constraints.Range;
@@ -110,9 +111,10 @@ public class RestfulController {
     /**
      * 参数校验2，入参为json数据
      * 异常类型：{@link org.springframework.web.bind.MethodArgumentNotValidException}
+     * 指定校验分组为{@link ValidatorGroup1}
      */
     @PostMapping("/param1")
-    public ResponseDTO param1(@Valid @RequestBody User user) {
+    public ResponseDTO param1(@Validated(value = {ValidatorGroup1.class}) @RequestBody User user) {
         return ResponseDTO.successObj().putData("user", user);
     }
 
